@@ -10,7 +10,10 @@ https://docs.djangoproject.com/en/3.1/howto/deployment/wsgi/
 import os
 
 from django.core.wsgi import get_wsgi_application
+import sys
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'mirri_validator_web.settings')
+sys.path.append("/home/peio/devel/cect/mirri_utils")
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "mirri_tools_web.settings")
 
 application = get_wsgi_application()

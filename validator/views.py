@@ -1,7 +1,9 @@
 from validator.forms import ValidationUploadForm
 from django.shortcuts import render
 from django.template.context_processors import csrf
-from mirri.validation.mirri import validate_mirri_excel
+
+from mirri.validation.mirri_excel import validate_mirri_excel
+
 
 from openpyxl import load_workbook
 from io import BytesIO
@@ -21,11 +23,9 @@ def validation_view(request):
         form = ValidationUploadForm(request_data, request.FILES)
         if form.is_valid():
             fhand = form.cleaned_data["file"]
-            print(fhand.name)
             error_log = validate_mirri_excel(fhand)
-
-            errorlog_.write(path_to_tmp_pdf)
-            # validate_mirri_excel(fhand)
+            print(error_log.errors.items())
+            # errorlog_.write(path_to_tmp_pdf)
 
     else:
         form = ValidationUploadForm()

@@ -14,7 +14,6 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-print(BASE_DIR)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -25,7 +24,7 @@ SECRET_KEY = "(njry^*5f!i4dgw3-v)ufah!t2mcbuz*^bd6mx148ke0+ahh=6"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.3.2']
+ALLOWED_HOSTS = ["192.168.3.2", "localhost"]
 
 
 # Application definition
@@ -50,7 +49,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "mirri_validator_web.urls"
+ROOT_URLCONF = "mirri_tools_web.urls"
 
 TEMPLATES = [
     {
@@ -68,7 +67,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "mirri_validator_web.wsgi.application"
+WSGI_APPLICATION = "mirri_tools_web.wsgi.application"
 
 
 # Database
