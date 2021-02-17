@@ -15,9 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from validator.views import validation_view
+from django.urls.conf import include
+import web_tools.urls
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('validator', validation_view)
+    path("admin/", admin.site.urls),
+    path("", include(web_tools.urls.urlpatterns)),
 ]

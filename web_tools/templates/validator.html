@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %} Mirri Validation tool {% endblock title %}
+{% block content %}
+{% if not search_done%}
+<form action="" enctype="multipart/form-data" method="post">{% csrf_token %}
+    <ul>
+		<li>
+	        {{ form.file.errors }}<label for="name">File:</label>{{ form.file }}
+	  	</li>
+   </ul>
+   <input type="submit" value="Submit" />
+</form>
+{% endif%}
+
+{% if search_done %}
+    {% for key, errors in errors.items%}
+        <h3>{{key}}</h3>
+        <ul>
+        {% for error in errors%}
+            <li>{{error.data}}: {{error.message}}</li>
+        {%  endfor %}
+        </ul>
+    {%endfor%}
+</ul>
+{% endif %}
+
+
+{% endblock content %}
