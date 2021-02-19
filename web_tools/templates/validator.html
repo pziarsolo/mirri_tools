@@ -13,15 +13,16 @@
 {% endif%}
 
 {% if search_done %}
-    {% for key, errors in errors.items%}
-        <h3>{{key}}</h3>
+    {% if valid %}
+        <h3> Congratulations, Your file complies the mirri specs</h3>
+    {% else %}
+        <h3> Your files has some error. Fix them and try it again</h3>
         <ul>
         {% for error in errors%}
-            <li>{{error.data}}: {{error.message}}</li>
+            <li>{{error.data}}: {{error.message}} ({{error.code}})</li>
         {%  endfor %}
         </ul>
-    {%endfor%}
-</ul>
+    {% endif %}
 {% endif %}
 
 

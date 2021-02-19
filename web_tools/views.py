@@ -1,7 +1,8 @@
 from web_tools.forms import ValidationUploadForm
 from django.shortcuts import render
 from django.template.context_processors import csrf
-
+from django.shortcuts import render
+from pathlib import Path
 from mirri.validation.mirri_excel import validate_mirri_excel
 
 
@@ -25,10 +26,16 @@ def validation_view(request):
         if form.is_valid():
             fhand = form.cleaned_data["file"]
             error_log = validate_mirri_excel(fhand)
-            context["errors"] = error_log.errors
-            for key, errors in error_log.errors.items():
-                print(errors[0].data)
-            # errorlog_.write(path_to_tmp_pdf)
+
+            errors = [error for errors in error_log.errors.values() for error in errors]
+
+            valid = True if not errors else False
+            context["valid"] = valid
+            context["errors"] = errors[:100]
+            context["more_errors"] = len(errors[100:])
+
+            # error_log.write(Path("/dev/null"))
+
         context["search_done"] = True
 
     else:
@@ -39,3 +46,7 @@ def validation_view(request):
     template = "validator.html"
     content_type = None
     return render(request, template, context=context, content_type=content_type)
+
+
+def index(request):
+    return render(request, "tools_index.html")
