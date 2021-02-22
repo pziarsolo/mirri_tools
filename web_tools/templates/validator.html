@@ -8,7 +8,7 @@
 	        {{ form.file.errors }}<label for="name">File:</label>{{ form.file }}
 	  	</li>
    </ul>
-   <input type="submit" value="Submit" />
+   <input type="submit" value="Validate" />
 </form>
 {% endif%}
 
@@ -22,6 +22,9 @@
             <li>{{error.data}}: {{error.message}} ({{error.code}})</li>
         {%  endfor %}
         </ul>
+        {% if more_errors != 0%}
+            <h4>You have more errors that we have hidden</h4>
+        {% endif %}
     {% endif %}
 {% endif %}
 
