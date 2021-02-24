@@ -1,13 +1,35 @@
+{% load static %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
 <title>{% block title %}{% endblock %}</title>
-<!-- <link href="/static/style/style.css" rel=stylesheet type="text/css">
-{{ form.media }} -->
+<link href="{% static 'web_tools/style.css' %}" rel=stylesheet type="text/css">
+{{ form.media }}
 </head>
 <body>
-{% block content %}{% endblock %}
+    <div id="page-container">
+        <div id="content-wrap">
+            <nav>
+                <ul>
+                    <li><a href='https://www.mirri.org'>MIRRI Home</a></li>
+                    <li><a href='/'>Tools</a>
+                        <ul>
+                            <li><a href='/validator'>Validator</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+
+            <main>
+                <div class="content">
+                    {% block content %}{% endblock %}
+                </div>
+            </mainn>
+        </div>
+
+        <footer id='footer'>footer</footer>
+    </div>
 </body>
 </html>

@@ -10,6 +10,8 @@ from openpyxl import load_workbook
 from io import BytesIO
 
 # Create your views here.
+
+
 def validation_view(request):
     context = {}
     context.update(csrf(request))
@@ -24,23 +26,26 @@ def validation_view(request):
     if request_data:
         form = ValidationUploadForm(request_data, request.FILES)
         if form.is_valid():
+            print('valid')
             fhand = form.cleaned_data["file"]
             error_log = validate_mirri_excel(fhand)
 
-            errors = [error for errors in error_log.errors.values() for error in errors]
+            errors = [error for errors in error_log.errors.values()
+                      for error in errors]
 
             valid = True if not errors else False
+            context['fname'] = fhand.name
             context["valid"] = valid
             context["errors"] = errors[:100]
             context["more_errors"] = len(errors[100:])
 
             # error_log.write(Path("/dev/null"))
 
-        context["search_done"] = True
+        context["validation_done"] = True
 
     else:
         form = ValidationUploadForm()
-        context["search_done"] = False
+        context["validation_done"] = False
     context["form"] = form
 
     template = "validator.html"

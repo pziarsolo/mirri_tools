@@ -1,22 +1,38 @@
 {% extends "base.html" %}
+
 {% block title %} Mirri Validation tool {% endblock title %}
 {% block content %}
-{% if not search_done%}
+<h3>Mirri v20200601 specifications validator</h3>
+<div class='info'>
+    <p>Please refer to the instructions contained in <a href='/media/docs/ICT-TaskForce_HowToCompileTheSheets_v20200601.pdf'>HowToCompileTheSheets_v20200601.pdf</a>
+    and <a href='/media/docs/ICT-TaskForce_RecommendationsToCollections_v20200601.pdf'>RecommendationsToCollections_v20200601.pdf</a> to compile your exel file</p>
+    <p>You can also contact the MIRRI ICT by email using <a href="mailto:ict-support@mirri.org">ICT Support</a></p>
+    <br>
+</div>
+
+{% if not validation_done %}
 <form action="" enctype="multipart/form-data" method="post">{% csrf_token %}
     <ul>
 		<li>
 	        {{ form.file.errors }}<label for="name">File:</label>{{ form.file }}
 	  	</li>
+        <li>
+            {{ form.file.errors }}<label for="name">Check it if you want to upload file if it fits the especifications</label>{{ form.do_upload }}
+        </li>
    </ul>
    <input type="submit" value="Validate" />
 </form>
 {% endif%}
 
-{% if search_done %}
+{% if  validation_done %}
     {% if valid %}
-        <h3> Congratulations, Your file complies the mirri specs</h3>
+        <h3> Congratulations, Your file {{fname}} <span class='strong'>complies</span> the mirri specs</h3>
     {% else %}
-        <h3> Your files has some error. Fix them and try it again</h3>
+        <p>Dear Curator</p>
+        <br>
+        <p>The Excel File {{fname}} you've provided {date} with your collection Strains Data contains <span class='strong'>errors/missing </span>data.</p>
+        <p>The structure of your Excel File show the following changes, as compared to the original Template:</p>
+
         <ul>
         {% for error in errors%}
             <li>{{error.data}}: {{error.message}} ({{error.code}})</li>
@@ -30,3 +46,5 @@
 
 
 {% endblock content %}
+
+
