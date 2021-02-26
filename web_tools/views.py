@@ -1,15 +1,18 @@
-from web_tools.forms import ValidationUploadForm
+import string
+import random
+from datetime import datetime
+
 from django.shortcuts import render
 from django.template.context_processors import csrf
-from django.shortcuts import render
-from pathlib import Path
+
+from web_tools import settings
+from web_tools.forms import ValidationUploadForm
 from mirri.validation.mirri_excel import validate_mirri_excel
 
 
-from openpyxl import load_workbook
-from io import BytesIO
-
-# Create your views here.
+def random_choice():
+    alphabet = string.ascii_lowercase + string.digits
+    return ''.join(random.choices(alphabet, k=8))
 
 
 def validation_view(request):
@@ -26,15 +29,28 @@ def validation_view(request):
     if request_data:
         form = ValidationUploadForm(request_data, request.FILES)
         if form.is_valid():
-            print('valid')
             fhand = form.cleaned_data["file"]
-            error_log = validate_mirri_excel(fhand)
+            fname = fhand.name
+            do_upload = form.cleaned_data['do_upload']
+            version = '20200601'
+
+            error_log = validate_mirri_excel(fhand, version=version)
 
             errors = [error for errors in error_log.errors.values()
                       for error in errors]
-
+            uploaded = False
             valid = True if not errors else False
-            context['fname'] = fhand.name
+            if valid and do_upload:
+                out_dir = settings.VALID_EXCEL_UPLOAD_DIR
+                date_uuid = datetime.now().strftime('%Y%m%d-%H:%M:%S')
+                path = out_dir / f'{date_uuid}_{fname}'
+                with path.open('wb') as out_fhand:
+                    fhand.seek(0)
+                    out_fhand.write(fhand.read())
+                uploaded = True
+
+            context['uploaded'] = uploaded
+            context['fname'] = fname
             context["valid"] = valid
             context["errors"] = errors[:100]
             context["more_errors"] = len(errors[100:])

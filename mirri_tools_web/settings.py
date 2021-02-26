@@ -119,3 +119,6 @@ USE_TZ = True
 
 STATIC_URL = "/static/"
 STATIC_ROOT = str(BASE_DIR / "static")
+
+
+WEB_TOOLS_VALID_EXCEL_UPLOAD_DIR = ''
