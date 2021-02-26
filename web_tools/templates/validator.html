@@ -37,9 +37,14 @@
         {% if valid %}
             <h3> Congratulations, Your file {{fname}} <span class="strong">complies</span> the mirri specs </h3>
         {% else %}
+
             <h3>The Excel File {{fname}} has errors</h3>
             <br />
-            <h4>Check the error and fix them vbefore submiting them again:</h4>
+            <button onclick="javascript:window.history.back();">Try again</button>
+            <br />
+            <h4>Check the error and fix them before submitting them again:</h4>
+
+
             <ul>
                 {% for error in errors%}
                     <li>{{error.data}}: {{error.message}} ({{error.code}})</li>
