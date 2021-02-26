@@ -1,10 +1,47 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %} Mirri tools {% endblock title %}
 {% block navigator %} Mirri tools {% endblock navigator %}
-{% block page_title %} Mirri tools {% endblock page_title %}
+{% block page_title %} {% endblock page_title %}
 {% block content %}
-<ul>
+<div class="elementor-column-wrap elementor-element-populated">
+    <div class="elementor-widget-wrap">
+        <div class="elementor-element elementor-element-b5feb0c elementor-widget elementor-widget-jet-portfolio"
+            data-id="b5feb0c" data-element_type="widget" data-widget_type="jet-portfolio.default">
+            <div class="elementor-widget-container">
+                <div class="elementor-jet-portfolio jet-elements">
+                    <div class="jet-portfolio layout-type-grid preset-type-1 layout-desktop-column-3 layout-tablet-column-2 layout-mobile-column-1"
+                        data-settings="{&quot;layoutType&quot;:&quot;grid&quot;,&quot;columns&quot;:&quot;3&quot;,&quot;columnsTablet&quot;:&quot;2&quot;,&quot;columnsMobile&quot;:&quot;1&quot;,&quot;perPage&quot;:6}">
+                        <div class="jet-portfolio__list">
+                            <article class="jet-portfolio__item visible-status item-loaded"
+                                data-slug="{&quot;0&quot;:&quot;all&quot;}">
+                                <div class="jet-portfolio__inner" style="opacity: 1; transform: scale(1);"> <a
+                                        class="jet-portfolio__link " href="/validator">
+                                        <div class="jet-portfolio__image"> <noscript><img
+                                                    class="jet-portfolio__image-instance"
+                                                    src="{% static 'web_tools/validator.png' %}" width="300"
+                                                    height="300" alt="R1ZN0XF9"></noscript><img
+                                                class="jet-portfolio__image-instance lazyloaded"
+                                                src="{% static 'web_tools/validator.png' %}"
+                                                data-src="{% static 'web_tools/validator.png' %}" alt="R1ZN0XF9"
+                                                width="300" height="300"></div>
+                                    </a>
+                                    <div class="jet-portfolio__content">
+                                        <div class="jet-portfolio__content-inner">
+                                            <h4 class="jet-portfolio__title">Validator</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- <ul>
     <li><a href='/validator'>Validator</a></li>
-</ul>
+</ul> -->
 
 {% endblock content %}

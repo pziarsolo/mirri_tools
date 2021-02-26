@@ -1,54 +1,55 @@
 {% extends "base.html" %}
-
 {% block title %} Mirri Validation tool {% endblock title %}
 {% block navigator%} Mirri Validation tool{% endblock navigator%}
 {% block page_title %} Mirri v20200601 specifications validator {% endblock page_title %}
 {% block content %}
 <div>
-    <div class='info'>
-        <p>Please refer to the instructions contained in <a href='/media/docs/ICT-TaskForce_HowToCompileTheSheets_v20200601.pdf'>HowToCompileTheSheets_v20200601.pdf</a>
-        and <a href='/media/docs/ICT-TaskForce_RecommendationsToCollections_v20200601.pdf'>RecommendationsToCollections_v20200601.pdf</a> to compile your exel file</p>
+    <div class="info">
+        <p>Please refer to this instructions to compile your excel file:</p>
+        <ul>
+            <li>
+                <a href="https://synology.mirri.org:5019/d/f/585510897426937562" target="_blank" >HowToCompileTheSheets_v20200601.pdf</a>
+            </li>
+            <li>
+                <a href="https://synology.mirri.org:5019/d/f/585510897965905633" target="_blank">RecommendationsToCollections_v20200601.pdf</a>
+            </li>
+        </ul>
         <p>You can also contact the MIRRI ICT by email using <a href="mailto:ict-support@mirri.org">ICT Support</a></p>
-        <br>
+        <br />
     </div>
 
     {% if not validation_done %}
     <div>
-    <form action="" enctype="multipart/form-data" method="post">{% csrf_token %}
+        <form action="" enctype="multipart/form-data" method="post">
+        {% csrf_token %}
         <ul>
+            <li>{{ form.file.errors }}<label for="name"></label>{{ form.file }}</li>
             <li>
-                {{ form.file.errors }}<label for="name">File:</label>{{ form.file }}
+              {{ form.file.errors }}{{ form.do_upload }}
+                <label for="name">Check it if you want to upload file if it fits the especifications</label>
             </li>
-            <li>
-                {{ form.file.errors }}<label for="name">Check it if you want to upload file if it fits the especifications</label>{{ form.do_upload }}
-            </li>
-    </ul>
-    <input type="submit" value="Validate" />
-    </form>
+        </ul>
+        <input type="submit" value="Validate" />
+        </form>
     </div>
     {% endif%}
-
-    {% if  validation_done %}
+    {% if validation_done %}
         {% if valid %}
-            <h3> Congratulations, Your file {{fname}} <span class='strong'>complies</span> the mirri specs</h3>
+            <h3> Congratulations, Your file {{fname}} <span class="strong">complies</span> the mirri specs </h3>
         {% else %}
-            <p>Dear Curator</p>
-            <br>
-            <p>The Excel File {{fname}} you've provided {date} with your collection Strains Data contains <span class='strong'>errors/missing </span>data.</p>
-            <p>The structure of your Excel File show the following changes, as compared to the original Template:</p>
-
+            <h3>The Excel File {{fname}} has errors</h3>
+            <br />
+            <h4>Check the error and fix them vbefore submiting them again:</h4>
             <ul>
-            {% for error in errors%}
-                <li>{{error.data}}: {{error.message}} ({{error.code}})</li>
-            {%  endfor %}
+                {% for error in errors%}
+                    <li>{{error.data}}: {{error.message}} ({{error.code}})</li>
+                {% endfor %}
             </ul>
             {% if more_errors != 0%}
                 <h4>You have more errors that we have hidden</h4>
             {% endif %}
         {% endif %}
     {% endif %}
-
 </div>
 {% endblock content %}
-
-
+<li data-syno-style="{&quot;lineHeight&quot;:&quot;1&quot;,&quot;paddingBottom&quot;:&quot;&quot;,&quot;paddingTop&quot;:&quot;&quot;,&quot;paddingLeft&quot;:&quot;0pt&quot;,&quot;textAlign&quot;:&quot;center&quot;}" data-syno-marks="[{&quot;_&quot;:&quot;font_size&quot;,&quot;value&quot;:&quot;9pt&quot;},{&quot;_&quot;:&quot;font_family&quot;,&quot;value&quot;:&quot;Arial&quot;}]"><span data-syno-text="true">Public Deposit</span></li>
