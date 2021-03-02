@@ -1,8 +1,6 @@
-{% extends "base.html" %}
-{% block title %} Mirri Validation tool {% endblock title %}
-{% block navigator%} Mirri Validation tool{% endblock navigator%}
-{% block page_title %} Mirri v20200601 specifications validator {% endblock page_title %}
-{% block content %}
+<html>
+<body>
+
 <div>
     <div class="info">
         <p>Please refer to this instructions to compile your excel file:</p>
@@ -18,22 +16,7 @@
         <br />
     </div>
 
-    {% if not validation_done %}
-    <div>
-        <form action="" enctype="multipart/form-data" method="post">
-        {% csrf_token %}
-        <ul>
-            <li>{{ form.file.errors }}<label for="name"></label>{{ form.file }}</li>
-            <li>
-              {{ form.file.errors }}{{ form.do_upload }}
-                <label for="name">Check it if you want to upload file if it fits the especifications</label>
-            </li>
-        </ul>
-        <input type="submit" value="Validate" />
-        </form>
-    </div>
-    {% endif%}
-    {% if validation_done %}
+
         {% if valid %}
             <h3> Congratulations, Your file {{fname}} <span class="strong">complies</span> the mirri specs </h3>
         {% else %}
@@ -42,7 +25,6 @@
             <br />
             <button onclick="javascript:window.history.back();">Try again</button>
             <br />
-            You can download the report <a type=button href='{{error_pdf_url}}'>Here</a></p>
             <h4>Check the error and fix them before submitting them again:</h4>
 
 
@@ -64,6 +46,7 @@
                 <h4>You have more errors that we have hidden</h4>
             {% endif %}
         {% endif %}
-    {% endif %}
 </div>
-{% endblock content %}
+
+</body>
+</html>

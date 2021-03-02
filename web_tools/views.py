@@ -1,18 +1,33 @@
 import string
 import random
+import copy
+import os.path
+import uuid
 from datetime import datetime
 
+from django.template import Context
+from django.template.loader import get_template
 from django.shortcuts import render
 from django.template.context_processors import csrf
+from django.conf import settings as global_settings
 
+from xhtml2pdf import pisa
 from web_tools import settings
 from web_tools.forms import ValidationUploadForm
+
 from mirri.validation.mirri_excel import validate_mirri_excel
 
 
 def random_choice():
     alphabet = string.ascii_lowercase + string.digits
     return ''.join(random.choices(alphabet, k=8))
+
+
+def render_to_pdf(template_name, context, out_fhand):
+    template = get_template(template_name)
+    html = template.render(context)
+    pdf = pisa.CreatePDF(html.strip(), dest=out_fhand)
+    return pdf
 
 
 def validation_view(request):
@@ -52,10 +67,24 @@ def validation_view(request):
             context['uploaded'] = uploaded
             context['fname'] = fname
             context["valid"] = valid
-            context["errors"] = errors[:100]
+            context["errors"] = errors[: 100]
             context["more_errors"] = len(errors[100:])
+            if not valid:
+                context_pdf = copy.deepcopy(context)
+                _uuid = str(uuid.uuid4())
+                error_fname = f'out_pdf/{_uuid}mirri_validator_output.pdf'
 
-            # error_log.write(Path("/dev/null"))
+                error_pdf_fpath = os.path.join(
+                    global_settings.MEDIA_ROOT, error_fname)
+                error_pdf_url = global_settings.MEDIA_URL + error_fname
+
+                with open(error_pdf_fpath, 'wb') as out_fhand:
+                    result = render_to_pdf(
+                        "pdf_validator.html", context_pdf, out_fhand)
+                    if result.err == 0:
+                        pdf_creation_error = True
+                        print(error_pdf_url)
+                        context['error_pdf_url'] = error_pdf_url
 
         context["validation_done"] = True
 

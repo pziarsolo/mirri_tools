@@ -9,9 +9,37 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
+import os
+import socket
 
 from pathlib import Path
 
+
+def get_ip_address():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.connect(("8.8.8.8", 80))
+    ip = s.getsockname()[0]
+    s.close()
+    return ip
+
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+CACHE_DIR = os.path.join(BASE_DIR, 'cache')
+SITE_ID = 1
+
+# Quick-start development settings - unsuitable for production
+# See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = '64j!29*6b9*gaian5y4&hyk=g++vs@0&%8$dfn9_qi6u55b-!9'
+
+# SECURITY WARNING: don't run with debug turned on in production!
+
+HOST_IP = get_ip_address()
+if HOST_IP.startswith('192.168'):
+    DEVELOPMENT_MACHINE = False
+else:
+    DEVELOPMENT_MACHINE = True
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -22,7 +50,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "(njry^*5f!i4dgw3-v)ufah!t2mcbuz*^bd6mx148ke0+ahh=6"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+
+
+if DEVELOPMENT_MACHINE:
+    DEBUG = True
+else:
+    DEBUG = False
 
 ALLOWED_HOSTS = ["192.168.3.2", "localhost"]
 
@@ -120,5 +153,7 @@ USE_TZ = True
 STATIC_URL = "/static/"
 STATIC_ROOT = str(BASE_DIR / "static")
 
+MEDIA_URL = "/media/"
+MEDIA_ROOT = str(BASE_DIR / "media")
 
 WEB_TOOLS_VALID_EXCEL_UPLOAD_DIR = ''
