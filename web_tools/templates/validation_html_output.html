@@ -51,7 +51,7 @@
                     <td>Message</td>
                     <td>Error Code</td>
                 </tr>
-                {% for error in all_errors%}
+                {% for error in errors%}
                     <tr>
                         <td>{{error.data}}</td>
                         <td>{{error.message}}</td>
