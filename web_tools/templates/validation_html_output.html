@@ -1,7 +1,7 @@
 {% extends "base.html" %}
-{% block title %} Mirri Validation tool {% endblock title %}
-{% block navigator%} Mirri Validation tool{% endblock navigator%}
-{% block page_title %} Mirri v20200601 specifications validator {% endblock page_title %}
+{% block title %} MIRRI Validation tool {% endblock title %}
+{% block navigator%} MIRRI Validation tool{% endblock navigator%}
+{% block page_title %} MIRRI v20200601 specifications validator {% endblock page_title %}
 {% block content %}
 <div>
     <div class="info">
@@ -37,22 +37,21 @@
         {% if valid %}
             <h3> Congratulations, Your file {{fname}} <span class="strong">complies</span> the mirri specs </h3>
         {% else %}
-
             <h3>The Excel File {{fname}} has errors</h3>
             <br />
             <button onclick="javascript:window.history.back();">Try again</button>
             <br />
-            You can download the report <a type=button href='{{error_pdf_url}}'>Here</a></p>
+            <p>You can download the report <a href='{{error_pdf_url}}' target='_blank'>Here</a></p>
             <h4>Check the error and fix them before submitting them again:</h4>
 
 
-            <table  border=1>
+            <table id='error_table'>
                 <tr>
                     <td>Acceession Number</td>
                     <td>Message</td>
                     <td>Error Code</td>
                 </tr>
-                {% for error in errors%}
+                {% for error in all_errors%}
                     <tr>
                         <td>{{error.data}}</td>
                         <td>{{error.message}}</td>
@@ -61,7 +60,7 @@
                 {% endfor %}
             </table>
             {% if more_errors != 0%}
-                <h4>You have more errors that we have hidden</h4>
+                <h4>You have more errors. They have been hidden.</h4>
             {% endif %}
         {% endif %}
     {% endif %}

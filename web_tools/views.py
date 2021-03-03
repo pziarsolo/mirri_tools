@@ -26,8 +26,8 @@ def random_choice():
 def render_to_pdf(template_name, context, out_fhand):
     template = get_template(template_name)
     html = template.render(context)
-    pdf = pisa.CreatePDF(html.strip(), dest=out_fhand)
-    return pdf
+    process = pisa.CreatePDF(html.strip(), dest=out_fhand)
+    return process
 
 
 def validation_view(request):
@@ -68,23 +68,24 @@ def validation_view(request):
             context['fname'] = fname
             context["valid"] = valid
             context["errors"] = errors[: 100]
+            context['all_errors'] = errors
             context["more_errors"] = len(errors[100:])
+
             if not valid:
-                context_pdf = copy.deepcopy(context)
                 _uuid = str(uuid.uuid4())
                 error_fname = f'out_pdf/{_uuid}mirri_validator_output.pdf'
 
-                error_pdf_fpath = os.path.join(
-                    global_settings.MEDIA_ROOT, error_fname)
+                error_pdf_fpath = os.path.join(global_settings.MEDIA_ROOT,
+                                               error_fname)
+
                 error_pdf_url = global_settings.MEDIA_URL + error_fname
 
                 with open(error_pdf_fpath, 'wb') as out_fhand:
-                    result = render_to_pdf(
-                        "pdf_validator.html", context_pdf, out_fhand)
-                    if result.err == 0:
-                        pdf_creation_error = True
-                        print(error_pdf_url)
-                        context['error_pdf_url'] = error_pdf_url
+                    result = render_to_pdf("validation_pdf_output.html", context,
+                                           out_fhand)
+                if result.err == 0:
+                    pdf_creation_error = True
+                    context['error_pdf_url'] = error_pdf_url
 
         context["validation_done"] = True
 
@@ -93,10 +94,14 @@ def validation_view(request):
         context["validation_done"] = False
     context["form"] = form
 
-    template = "validator.html"
+    template = "validation_html_output.html"
     content_type = None
     return render(request, template, context=context, content_type=content_type)
 
 
 def index(request):
+    return render(request, "index.html")
+
+
+def tool_list_view(request):
     return render(request, "tools_index.html")
