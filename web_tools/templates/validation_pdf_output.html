@@ -52,13 +52,13 @@ body {
 
     <table  id='error_table'>
         <tr>
-            <td style='width: 140px'>Acceession Number</td>
+            <td style='width: 140px'>Row ID</td>
             <td >Message</td>
             <td style='width: 120px'>Error Code</td>
         </tr>
         {% for error in errors%}
             <tr>
-                <td>{{error.data}}</td>
+                <td>{% if error.pk is not None %} {{error.pk}} {% endif%}</td>
                 <td>{{error.message}}</td>
                 <td>{{error.code}}</td>
             </tr>

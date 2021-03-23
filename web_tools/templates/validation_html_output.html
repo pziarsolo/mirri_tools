@@ -47,15 +47,15 @@
 
             <table id='error_table'>
                 <tr>
-                    <td>Acceession Number</td>
+                    <td>Row ID</td>
                     <td>Message</td>
                     <td>Error Code</td>
                 </tr>
                 {% for error in errors%}
                     <tr>
-                        <td>{{error.data}}</td>
+                        <td style='width:6em'>{% if error.pk is not None %} {{error.pk}} {% endif%} </td>
                         <td>{{error.message}}</td>
-                        <td>{{error.code}}</td>
+                        <td style='width:6em'>{{error.code}}</td>
                     </tr>
                 {% endfor %}
             </table>

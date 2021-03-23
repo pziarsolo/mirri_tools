@@ -15,7 +15,7 @@ from xhtml2pdf import pisa
 from web_tools import settings
 from web_tools.forms import ValidationUploadForm
 
-from mirri.validation.mirri_excel import validate_mirri_excel
+from mirri.validation.excel_validator import validate_mirri_excel
 
 
 def random_choice():
@@ -26,17 +26,16 @@ def random_choice():
 def render_to_pdf(template_name, context, out_fhand):
     template = get_template(template_name)
     html = template.render(context)
-    process = pisa.CreatePDF(html.strip(), dest=out_fhand)
-    return process
+    return pisa.CreatePDF(html.strip(), dest=out_fhand)
 
 
 def validation_view(request):
     context = {}
     context.update(csrf(request))
-    if request.method == "POST":
-        request_data = request.POST
-    elif request.method == "GET":
+    if request.method == "GET":
         request_data = request.GET
+    elif request.method == "POST":
+        request_data = request.POST
     else:
         request_data = None
     form = None
@@ -51,10 +50,10 @@ def validation_view(request):
 
             error_log = validate_mirri_excel(fhand, version=version)
 
-            errors = [error for errors in error_log.errors.values()
+            errors = [error for errors in error_log.get_errors().values()
                       for error in errors]
             uploaded = False
-            valid = True if not errors else False
+            valid = not errors
             if valid and do_upload:
                 out_dir = settings.VALID_EXCEL_UPLOAD_DIR
                 date_uuid = datetime.now().strftime('%Y%m%d-%H:%M:%S')
