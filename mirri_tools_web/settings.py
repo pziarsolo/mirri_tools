@@ -13,6 +13,11 @@ import os
 import socket
 
 from pathlib import Path
+try:
+    from .secrets import SITE_SECRET_ID
+except ImportError as error:
+    raise ImportError('You need a secrets.py file with SITE_SECRET_ID on it') from error
+
 
 
 def get_ip_address():
@@ -31,7 +36,7 @@ SITE_ID = 1
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '64j!29*6b9*gaian5y4&hyk=g++vs@0&%8$dfn9_qi6u55b-!9'
+SECRET_KEY = SITE_SECRET_ID
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
