@@ -41,10 +41,7 @@ SECRET_KEY = SITE_SECRET_ID
 # SECURITY WARNING: don't run with debug turned on in production!
 
 HOST_IP = get_ip_address()
-if HOST_IP.startswith('192.168'):
-    DEVELOPMENT_MACHINE = False
-else:
-    DEVELOPMENT_MACHINE = True
+DEVELOPMENT_MACHINE = not HOST_IP.startswith('192.168')
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -57,11 +54,8 @@ SECRET_KEY = "(njry^*5f!i4dgw3-v)ufah!t2mcbuz*^bd6mx148ke0+ahh=6"
 # SECURITY WARNING: don't run with debug turned on in production!
 
 
-if DEVELOPMENT_MACHINE:
-    DEBUG = True
-else:
-    DEBUG = False
-
+DEBUG = DEVELOPMENT_MACHINE
+DEBUG=True
 ALLOWED_HOSTS = ["192.168.3.2", "localhost"]
 
 

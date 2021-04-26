@@ -1,10 +1,13 @@
 {% extends "base.html" %}
+{% load web_tool_utils %}
 {% block title %} MIRRI Validation tool {% endblock title %}
 {% block navigator%} MIRRI Validation tool{% endblock navigator%}
 {% block page_title %} MIRRI v20200601 specifications validator {% endblock page_title %}
 {% block content %}
 <div>
+    {% if not validation_done%}
     <div class="info">
+
         <p>Please refer to this instructions to compile your excel file:</p>
         <ul>
             <li>
@@ -16,7 +19,9 @@
         </ul>
         <p>You can also contact the MIRRI ICT by email using <a href="mailto:ict-support@mirri.org">ICT Support</a></p>
         <br />
+
     </div>
+    {% endif%}
 
     {% if not validation_done %}
     <div>
@@ -35,33 +40,43 @@
     {% endif%}
     {% if validation_done %}
         {% if valid %}
-            <h3> Congratulations, Your file {{fname}} <span class="strong">complies</span> the mirri specs </h3>
+            <h3> Congratulations, Your file <span style='font-weigth: bold'>{{fname}}</span> <span class="strong">complies</span> the mirri specs </h3>
         {% else %}
-            <h3>The Excel File {{fname}} has errors</h3>
-            <br />
-            <button onclick="javascript:window.history.back();">Try again</button>
-            <br />
+            <p>Dear Curator of Culture Collection {{culture_collection}}:</p>
+            <p>The ExcelFile <span class="strong">{{fname}}</span> you’ve provided on {{file_date}}  with your collection Strains Data contains errors/inconsistencies/missing data.</p>
+            <p>Please, see below the list of detected errors/missing data, for you to proceed with the appropriated correction/completion.</p>
+            <p>If you need help, please refer to the instructions contained in <a href="https://synology.mirri.org:5019/d/f/585510897426937562" target="_blank" >HowToCompileTheSheets_v20200601.pdf</a> and <a href="https://synology.mirri.org:5019/d/f/585510897965905633" target="_blank">RecommendationsToCollections_v20200601.pdf</a>.
+
+            <p>You can also contact the MIRRI ICT by email using: <a href="mailto:ict-support@mirri.org">ICT Support</a></p>
             <p>You can download the report <a href='{{error_pdf_url}}' target='_blank'>Here</a></p>
+
+            <br />
+
             <h4>Check the error and fix them before submitting them again:</h4>
+            {% for entity, errors in all_errors.items %}
 
-
-            <table id='error_table'>
-                <tr>
-                    <td>Row ID</td>
-                    <td>Message</td>
-                    <td>Error Code</td>
-                </tr>
-                {% for error in errors%}
-                    <tr>
-                        <td style='width:6em'>{% if error.pk is not None %} {{error.pk}} {% endif%} </td>
-                        <td>{{error.message}}</td>
-                        <td style='width:6em'>{{error.code}}</td>
-                    </tr>
-                {% endfor %}
-            </table>
-            {% if more_errors != 0%}
-                <h4>You have more errors. They have been hidden.</h4>
+                <div style='margin-top:40px;'>
+                    <h3>{{entity}}</h3>
+                    <table class='error_table' style='width:100%;margin-bottom:20px;'>
+                        <tr style='border-bottom: 1px solid black;'>
+                            <th>Identifier</th>
+                            <th>Error Message</th>
+                            <th>Error Code</th>
+                        </tr>
+                        {% for error in errors%}
+                            <tr style='border-bottom: 1px dotted grey;'>
+                                <td style='width:6em'>{% if error.pk is None %} - {% else %} {{error.pk}} {% endif%} </td>
+                                <td>{{error.message|add_span_tag}}</td>
+                                <td style='width:6em'>{{error.code}}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            {% endfor %}
+            {% if total_errors > error_limited_to %}
+                <h4 style='margin-top: 40px'>You have more than {{error_limited_to}} errors. They have been hidden.</h4>
             {% endif %}
+            <button onclick="javascript:window.history.back();">Try again</button>
         {% endif %}
     {% endif %}
 </div>

@@ -1,38 +1,74 @@
+{% load web_tool_utils %}
 <!DOCTYPE html>
 <html>
 <head>
 <style type='text/css'>
-#error_table {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 1em;
-    border-collapse: collapse;
-    width: 100%;
-}
+    .error_table {
+        width: 100%;
+    }
 
-#error_table td, #error_table th {
-    border: 1px solid #ddd;
-    padding: 8px;
-}
+    .error_table td, .error_table th {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
 
-#error_table tr:nth-child{background-color: #f2f2f2;}
+    .error_table tr:nth-child{background-color: #f2f2f2;}
 
-#error_table tr:hover {background-color: #ddd;}
+    .error_table tr:hover {background-color: #ddd;}
 
-#error_table th {
-    padding-top: 12px;
-    padding-bottom: 12px;
-
-    background-color: #838383;
-  }
-body {
-    font-size: 1.2em;
-}
+    .error_table th {
+       background-color: #ddd;
+    }
+    .header_row {
+        border-bottom: 1px solid black;
+    }
+    .id_column {
+        width: 120px;
+    }
+    .error_code_column {
+        width: 80px;
+    }
+    body {
+        font-size: 1.2em;
+    }
 </style>
 </head>
 <body>
 
-<div>
     <div style='width: 100%;padding:10px'>
+        <p>Dear Curator of Culture Collection {{culture_collection}}:</p>
+        <p>The ExcelFile <span class="strong">{{fname}}</span> you’ve provided on {{file_date}}  with your collection Strains Data contains errors/ inconsistencies/ missing data.<br>
+        Please, see below the list of detected errors/missing data, for you to proceed with the appropriated correction/completion.<br>
+        If you need help, please refer to the instructions contained in <a href="https://synology.mirri.org:5019/d/f/585510897426937562" target="_blank" >HowToCompileTheSheets_v20200601.pdf</a> and <a href="https://synology.mirri.org:5019/d/f/585510897965905633" target="_blank">RecommendationsToCollections_v20200601.pdf</a>.</p>
+
+        <p>You can also contact the MIRRI ICT by email using: <a href="mailto:ict-support@mirri.org">ICT Support</a></p>
+
+        <h2>Check the error and fix them before submitting them again:</h2>
+        {% for entity, errors in all_errors.items %}
+            <h3>{{entity}}</h3>
+            <table class='error_table'>
+                <thead>
+                    <tr class='header_row'>
+                        <th class='id_column'>Identifier</th>
+                        <th>Error Message</th>
+                        <th class='error_code_column'>Error Code</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for error in errors%}
+                    <tr style='border-bottom: 1px dotted grey;'>
+                        <td class='id_column'>{% if error.pk is None %} - {% else %} {{error.pk}} {% endif%} </td>
+                        <td>{{error.message|add_span_tag}}</td>
+                        <td class='error_code_column'>{{error.code}}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endfor %}
+    </div>
+
+{% comment %}
+
         <h2 style='text-align:center'> MIRRI validator Report for {{ fname }}</h2>
         <p>Please refer to this instructions to compile your excel file:</p>
         <ul>
@@ -50,24 +86,26 @@ body {
     <h3 style='text-align:center'>The Excel File has errors</h3>
     <h4 style='text-align:center'>Check the error and fix them before submitting them again:</h4>
 
-    <table  id='error_table'>
-        <tr>
-            <td style='width: 140px'>Row ID</td>
-            <td >Message</td>
-            <td style='width: 120px'>Error Code</td>
-        </tr>
-        {% for error in errors%}
-            <tr>
-                <td>{% if error.pk is not None %} {{error.pk}} {% endif%}</td>
-                <td>{{error.message}}</td>
-                <td>{{error.code}}</td>
+    {% for entity, errors in all_errors.items%}
+        <table id='error_table'>
+            {{entity}}
+            <tr style='border-bottom: 1px solid black;'>
+                <th>Identifier</th>
+                <th>Error Message</th>
+                <th>Error Code</th>
             </tr>
-        {% endfor %}
-    </table>
+            {% for error in errors%}
+                <tr>
+                    <td style='width:6em'>{% if error.pk is None %} - {% else %} {{error.pk}} {% endif %} </td>
+                    <td>{{error.message}}</td>
+                    <td style='width:6em'>{{error.code}}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endfor %}
     {% if more_errors != 0%}
         <h4>You have more errors that we have hidden</h4>
-    {% endif %}
-</div>
+    {% endif %} {% endcomment %}
 
 </body>
 </html>

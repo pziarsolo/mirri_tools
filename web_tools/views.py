@@ -2,6 +2,7 @@ import string
 import random
 import copy
 import os.path
+from typing import OrderedDict
 import uuid
 from datetime import datetime
 
@@ -16,7 +17,7 @@ from web_tools import settings
 from web_tools.forms import ValidationUploadForm
 
 from mirri.validation.excel_validator import validate_mirri_excel
-
+from mirri.validation.error_logging.error import Entity
 
 def random_choice():
     alphabet = string.ascii_lowercase + string.digits
@@ -26,6 +27,7 @@ def random_choice():
 def render_to_pdf(template_name, context, out_fhand):
     template = get_template(template_name)
     html = template.render(context)
+    # print(html)
     return pisa.CreatePDF(html.strip(), dest=out_fhand)
 
 
@@ -49,11 +51,14 @@ def validation_view(request):
             version = '20200601'
 
             error_log = validate_mirri_excel(fhand, version=version)
+            all_errors = error_log.get_errors()
+            total_num_errors= sum(len(errors) for errors in all_errors.values())
+            errors_filtered_by_size = prepare_dict_to_show(all_errors,
+                                                           limit=settings.NUM_ERROR_LIMIT)
 
-            errors = [error for errors in error_log.get_errors().values()
-                      for error in errors]
+
             uploaded = False
-            valid = not errors
+            valid = not total_num_errors
             if valid and do_upload:
                 out_dir = settings.VALID_EXCEL_UPLOAD_DIR
                 date_uuid = datetime.now().strftime('%Y%m%d-%H:%M:%S')
@@ -66,9 +71,9 @@ def validation_view(request):
             context['uploaded'] = uploaded
             context['fname'] = fname
             context["valid"] = valid
-            context["errors"] = errors[: 100]
-            context['all_errors'] = errors
-            context["more_errors"] = len(errors[100:])
+            context["all_errors"] = errors_filtered_by_size
+            context['total_errors'] = total_num_errors
+            context['error_limited_to'] = settings.NUM_ERROR_LIMIT
 
             if not valid:
                 _uuid = str(uuid.uuid4())
@@ -96,6 +101,18 @@ def validation_view(request):
     template = "validation_html_output.html"
     content_type = None
     return render(request, template, context=context, content_type=content_type)
+
+def prepare_dict_to_show(dictionary, limit):
+    new_dict = OrderedDict()
+    remaining = limit
+    for key, values in dictionary.items():
+        new_values = values[:remaining] if len(values) >= remaining else values
+        remaining -= len(new_values)
+        key = Entity(key).name
+        new_dict[key] = new_values
+        if remaining <= 0:
+            break
+    return new_dict
 
 
 def index(request):
