@@ -29,10 +29,10 @@
         {% csrf_token %}
         <ul>
             <li>{{ form.file.errors }}<label for="name"></label>{{ form.file }}</li>
-            <li>
-              {{ form.file.errors }}{{ form.do_upload }}
-                <label for="name">Check it if you want to upload file if it fits the especifications</label>
-            </li>
+<!--            <li>-->
+<!--              {{ form.file.errors }}{{ form.do_upload }}-->
+<!--                <label for="name">Check it if you want to upload file if it fits the especifications</label>-->
+<!--            </li>-->
         </ul>
         <input type="submit" value="Validate" />
         </form>

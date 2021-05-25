@@ -48,7 +48,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 DEBUG = DEVELOPMENT_MACHINE
-
 ALLOWED_HOSTS = ["192.168.3.2", "localhost"]
 
 # Application definition
