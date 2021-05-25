@@ -19,7 +19,6 @@ except ImportError as error:
     raise ImportError('You need a secrets.py file with SITE_SECRET_ID on it') from error
 
 
-
 def get_ip_address():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.connect(("8.8.8.8", 80))
@@ -48,16 +47,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "(njry^*5f!i4dgw3-v)ufah!t2mcbuz*^bd6mx148ke0+ahh=6"
-
-# SECURITY WARNING: don't run with debug turned on in production!
-
-
 DEBUG = DEVELOPMENT_MACHINE
-DEBUG=True
-ALLOWED_HOSTS = ["192.168.3.2", "localhost"]
 
+ALLOWED_HOSTS = ["192.168.3.2", "localhost"]
 
 # Application definition
 
