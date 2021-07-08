@@ -56,13 +56,14 @@ def validation_view(request):
             errors_filtered_by_size = prepare_dict_to_show(all_errors,
                                                            limit=settings.NUM_ERROR_LIMIT)
 
-
             uploaded = False
             valid = not total_num_errors
+
             if valid and do_upload:
                 out_dir = settings.VALID_EXCEL_UPLOAD_DIR
                 date_uuid = datetime.now().strftime('%Y%m%d-%H:%M:%S')
                 path = out_dir / f'{date_uuid}_{fname}'
+
                 with path.open('wb') as out_fhand:
                     fhand.seek(0)
                     out_fhand.write(fhand.read())

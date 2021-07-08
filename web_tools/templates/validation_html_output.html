@@ -29,10 +29,10 @@
         {% csrf_token %}
         <ul>
             <li>{{ form.file.errors }}<label for="name"></label>{{ form.file }}</li>
-<!--            <li>-->
-<!--              {{ form.file.errors }}{{ form.do_upload }}-->
-<!--                <label for="name">Check it if you want to upload file if it fits the especifications</label>-->
-<!--            </li>-->
+            <li>
+              {{ form.file.errors }}{{ form.do_upload }}
+                <label for="name">Check it if you want to upload the file if it complies with the specifications</label>
+            </li>
         </ul>
         <input type="submit" value="Validate" />
         </form>
@@ -41,6 +41,9 @@
     {% if validation_done %}
         {% if valid %}
             <h3> Congratulations, Your file <span style='font-weigth: bold'>{{fname}}</span> <span class="strong">complies</span> the mirri specs </h3>
+            {% if uploaded %}
+                <p>Your file has been uploaded to MIRRI Storage Correctly. Once an Admin notices it, data will be uploaded into MIRRI-IS</p>
+            {% endif %}
         {% else %}
             <p>Dear Curator of Culture Collection {{culture_collection}}:</p>
             <p>The ExcelFile <span class="strong">{{fname}}</span> you’ve provided on {{file_date}}  with your collection Strains Data contains errors/inconsistencies/missing data.</p>
