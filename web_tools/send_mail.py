@@ -1,17 +1,11 @@
-#!/usr/bin/env python3
-import sys
 import smtplib
-
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 
-RECEIVERS = ['pziarsolo@cect.org']
-
-
-def send_mail(receivers):
+def send_mail(receivers, fname):
     subject = "New file uploaded with validator"
-    body = f"A new file has been uploaded using the validator file: {sys.argv[1]}"
+    body = f"A new file has been uploaded using the validator file: {fname}"
     sender_email = "pziarsolo@cect.org"
 
     # Create a multipart message and set headers
@@ -31,6 +25,3 @@ def send_mail(receivers):
     server.sendmail(sender_email, receivers, text)
     server.close()
 
-
-if __name__ == '__main__':
-    send_mail(RECEIVERS)

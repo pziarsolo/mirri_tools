@@ -18,6 +18,8 @@ from web_tools.forms import ValidationUploadForm
 
 from mirri.validation.excel_validator import validate_mirri_excel
 from mirri.validation.error_logging.error import Entity
+from web_tools.send_mail import send_mail
+
 
 def random_choice():
     alphabet = string.ascii_lowercase + string.digits
@@ -68,6 +70,9 @@ def validation_view(request):
                     fhand.seek(0)
                     out_fhand.write(fhand.read())
                 uploaded = True
+
+                if settings.NOTIFICATION_RECEIVERS:
+                    send_mail(settings.NOTIFICATION_RECEIVERS, path.name)
 
             context['uploaded'] = uploaded
             context['fname'] = fname
