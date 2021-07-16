@@ -1,23 +1,22 @@
 import string
 import random
-import copy
 import os.path
 from typing import OrderedDict
 import uuid
 from datetime import datetime
 
-from django.template import Context
 from django.template.loader import get_template
 from django.shortcuts import render
 from django.template.context_processors import csrf
 from django.conf import settings as global_settings
 
 from xhtml2pdf import pisa
-from web_tools import settings
-from web_tools.forms import ValidationUploadForm
 
 from mirri.validation.excel_validator import validate_mirri_excel
 from mirri.validation.error_logging.error import Entity
+
+from web_tools import settings
+from web_tools.forms import ValidationUploadForm
 from web_tools.send_mail import send_mail
 
 
@@ -54,7 +53,7 @@ def validation_view(request):
 
             error_log = validate_mirri_excel(fhand, version=version)
             all_errors = error_log.get_errors()
-            total_num_errors= sum(len(errors) for errors in all_errors.values())
+            total_num_errors = sum(len(errors) for errors in all_errors.values())
             errors_filtered_by_size = prepare_dict_to_show(all_errors,
                                                            limit=settings.NUM_ERROR_LIMIT)
 
