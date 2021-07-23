@@ -147,4 +147,4 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = str(BASE_DIR / "media")
 
 WEB_TOOLS_VALID_EXCEL_UPLOAD_DIR = BASE_DIR / 'uploaded'
-WEB_TOOLS_NOTIFICATION_RECEIVERS = ['pziarsolo@cect.org']
+WEB_TOOLS_NOTIFICATION_RECEIVERS = ['jmlopez@cect.org']
